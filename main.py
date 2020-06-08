@@ -5,21 +5,21 @@ import time
 import random
 from pygame.locals import *
 
-# pygame.mixer.pre_init(44100,-16,2,2048)
 pygame.init()
+# pygame.mixer.pre_init(44100,-16,2,2048)
 # pygame.mixer.init()
 pygame.font.init()
 
-l,h= 1280,960
+l,h = pygame.display.Info().current_w,pygame.display.Info().current_h
 
-ecran = pygame.display.set_mode((l,h))
+
+
+ecran = pygame.display.set_mode((l,h- 100))
 
 #os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 jeu = True
 
-
-# music_intro = pygame.mixer.Sound("data/music/intro")
 
 def texte(text,size):
 	f = pygame.font.Font(None,size)
@@ -28,15 +28,14 @@ def texte(text,size):
 
 def intro():
 	jeu = True
-
-	leo = texte("Léo", 25)
-	Lv = texte("Louis-Victor",25)
-	presente = texte("Présente : ",25)
-
+	# pygame.mixer.music.load("data/music/intro.mp3")
+	# pygame.mixer.music.play(-1)
+	size = 80
+	leo = texte("Léo ...", size)
+	Lv = texte("... et Louis-Victor",size)
+	presente = texte("Présentent ",size)
 	t=0
-	t1=10/3
-
-
+	t1=1/3
 	while jeu:
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -52,24 +51,75 @@ def intro():
 			ecran.fill((0,0,0))
 			ecran.blit(presente, (l/2,h/2)) 
 		else:
-			jeu = False
-		
+			menu()
 
-		
-		# ecran.blit(fond,(0,0))
-		# ecran.blit(ballon, (x,y)) # perso
 		time.sleep(0.002)
 		
 		pygame.display.flip()
-		t+=0.02
+		t+=0.002
 
-	
-	
+def dansBoite(box,x,y):
+	if x>box[0][0] and x < box[1][0] and  y>box[0][1] and y < box[1][1]:
+		return True
+	else:
+		return False
+		
 
 
+def menu():
+	jeu = True
 
-x=400
-y=1280/2
+	optiontxt = texte("Options",80)
+	Jouertxt = texte("Jouer",80)
+	Quittertxt = texte("Quitter",80)
+
+	optiontxtS = texte("Options",100)
+	JouertxtS = texte("Jouer",100)
+	QuittertxtS = texte("Quitter",100) 
+
+	jouerBox = [(l/2,(h/2)-100),((l/2+200,(h/2)))]
+	optionBox = [(l/2,(h/2)),((l/2+200,(h/2)+100))]
+	QuitterBox = [(l/2,(h/2)+100),((l/2+230,(h/2)+200))]
+
+	while jeu:
+
+		x,y = pygame.mouse.get_pos()
+		
+		for event in pygame.event.get():
+				if event.type == QUIT:
+					jeu = False
+		
+		ecran.fill((0,0,0))
+		if dansBoite(jouerBox,x,y):
+			ecran.blit(JouertxtS, jouerBox[0]) 
+			press = pygame.mouse.get_pressed()
+			if press[0] == 1:
+				print("Jouer")
+		else:
+			ecran.blit(Jouertxt, jouerBox[0])
+
+
+		if dansBoite(optionBox,x,y):
+			ecran.blit(optiontxtS, optionBox[0]) 
+			press = pygame.mouse.get_pressed()
+			if press[0] == 1:
+				print("Options")
+		else:		
+			ecran.blit(optiontxt, optionBox[0]) 
+
+
+		if dansBoite(QuitterBox,x,y):	
+			ecran.blit(QuittertxtS, QuitterBox[0]) 
+			press = pygame.mouse.get_pressed()
+			if press[0] == 1:
+				print("Quitter")
+		else:
+			ecran.blit(Quittertxt, QuitterBox[0]) 
+
+		
+		time.sleep(0.002)
+		pygame.display.flip()
+
 """
 while jeu:
 	for event in pygame.event.get():
@@ -93,4 +143,6 @@ while jeu:
 	pygame.display.flip()
 """
 
-intro()
+# intro()
+menu()
+
