@@ -15,8 +15,12 @@ pygame.font.init()
 """
 ------------------------------  INITIALISATION DU MODULE SONORE  ------------------------------
 """
-# pygame.mixer.pre_init(44100,-16,2,2048)
-# pygame.mixer.init()
+try:
+	pygame.mixer.pre_init(44100,-16,2,2048)
+	pygame.mixer.init()
+except pygame.error:
+	()
+
 
 """
 ------------------------------  PARAMETRES  ------------------------------
@@ -57,6 +61,16 @@ def dansBoite(box,x,y):
 	else:
 		return False
 
+def music(chemin):
+	"""
+	Lance le son chemin et ne plante pas si il n'y a pas de carte son
+	"""
+	try:
+		pygame.mixer.music.load(chemin)  
+		pygame.mixer.music.play(-1)
+	except pygame.error:
+		()
+
 
 """
 ------------------------------  SCENES DU JEU  ------------------------------
@@ -67,10 +81,7 @@ def intro():
 	Affiche le générique d'introduction
 	"""
 	jeu = True
-		## En commentaire : NE MARCHE PAS ENCORE
-	# pygame.mixer.music.load("data/music/intro.mp3")  
-	# pygame.mixer.music.play(-1)
-
+	music("data/music/intro.mp3")
 		## Taille de la police
 	size = 80
 		## Génération des textes
@@ -108,6 +119,7 @@ def menu():
 	"""
 	Affiche le menu
 	"""
+	music("data/music/menu.mp3")
 	jeu = True
 		## Textes au repos
 	optiontxt = texte("Options",80)
