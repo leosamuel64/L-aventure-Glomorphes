@@ -63,7 +63,7 @@ def dansBoite(box,x,y):
 
 def music(chemin):
 	"""
-	Lance le son chemin et ne plante pas si il n'y a pas de carte son
+	Lance le son chemin et ne plante pas si il n'y a pas de moyen de lire le son
 	"""
 	try:
 		pygame.mixer.music.load(chemin)  
