@@ -5,9 +5,9 @@ import time
 import random
 from pygame.locals import *
 
-pygame.mixer.pre_init(44100,-16,2,2048)
+# pygame.mixer.pre_init(44100,-16,2,2048)
 pygame.init()
-pygame.mixer.init()
+# pygame.mixer.init()
 pygame.font.init()
 
 l,h= 1280,960
@@ -19,11 +19,11 @@ ecran = pygame.display.set_mode((l,h))
 jeu = True
 
 
-music_intro = pygame.mixer.Sound("data/music/intro")
+# music_intro = pygame.mixer.Sound("data/music/intro")
 
 def texte(text,size):
 	f = pygame.font.Font(None,size)
-	textFont = f.render(text,True,(0,0,0))
+	textFont = f.render(text,True,(255,255,255))
 	return textFont
 
 def intro():
@@ -43,19 +43,25 @@ def intro():
 				jeu = False
 
 		if t < t1:
+			ecran.fill((0,0,0))
 			ecran.blit(leo, (l/2,h/2)) 
 		elif t<2*t1:
+			ecran.fill((0,0,0))
 			ecran.blit(Lv, (l/2,h/2)) 
 		elif t<3*t1:
+			ecran.fill((0,0,0))
 			ecran.blit(presente, (l/2,h/2)) 
 		else:
 			jeu = False
+		
 
 		
 		# ecran.blit(fond,(0,0))
 		# ecran.blit(ballon, (x,y)) # perso
 		time.sleep(0.002)
+		
 		pygame.display.flip()
+		t+=0.02
 
 	
 	
