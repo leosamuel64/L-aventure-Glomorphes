@@ -110,6 +110,7 @@ def intro():
 			ecran.blit(presente, (l/2,h/2)) 
 		else:
 			menu()
+			jeu = False
 
 		time.sleep(0.002)
 		pygame.display.flip()
@@ -129,6 +130,7 @@ def menu():
 	optiontxtS = texte("Infos",100)
 	JouertxtS = texte("Jouer",100)
 	QuittertxtS = texte("Quitter",100) 
+	Merci = texte("Merci d'avoir joué !",100)
 
 		## Rectangles autour des textes
 	jouerBox = [(l/2,(h/2)-100),((l/2+200,(h/2)))]
@@ -158,7 +160,8 @@ def menu():
 			ecran.blit(optiontxtS, optionBox[0]) 
 			press = pygame.mouse.get_pressed()
 			if press[0] == 1:
-				print("Options")
+				info()
+				jeu = False
 		else:		
 			ecran.blit(optiontxt, optionBox[0]) 
 
@@ -166,12 +169,62 @@ def menu():
 			ecran.blit(QuittertxtS, QuitterBox[0]) 
 			press = pygame.mouse.get_pressed()
 			if press[0] == 1:
-				print("Quitter")
+				ecran.fill((0,0,0))
+				ecran.blit(Merci, (l/2-200,h/2)) 
+				pygame.display.flip()
+				time.sleep(1)
+				jeu = False
 		else:
 			ecran.blit(Quittertxt, QuitterBox[0]) 
 
 		time.sleep(0.002)
 		pygame.display.flip()
+
+def info():
+	jeu = True
+	flecheNorm = pygame.image.load("data/picture/Back_Arrow.png")
+	flecheNorm = pygame.transform.scale(flecheNorm, (100, 100))
+	flecheBig = pygame.image.load("data/picture/Back_Arrow.png")
+	flecheBig = pygame.transform.scale(flecheBig, (150, 150))
+
+	Titre = texte("Titre",100)
+	create = texte("Jeu Créé par Louis-Victor et Léo",50)
+	version = texte("Version : 0.1",50)
+	Annee = texte("MPSI - 2019/2020",50)
+
+	flecheBox = [(50,50),(150,150)]
+
+	while jeu:
+			## On récupère la possition de la souris
+		x,y = pygame.mouse.get_pos()
+
+		ecran.fill((0,0,0))
+		
+			## Detection de la croix
+		for event in pygame.event.get():
+				if event.type == QUIT:
+					jeu = False
+		if dansBoite(flecheBox,x,y):
+			ecran.blit(flecheBig, (flecheBox[0][0],flecheBox[0][1]))
+			press = pygame.mouse.get_pressed()
+			if press[0] == 1:
+				menu()
+				jeu=False
+		else:
+			ecran.blit(flecheNorm, (flecheBox[0][0],flecheBox[0][1]))
+
+		ecran.blit(Titre, (l/2,50))
+		ecran.blit(create, (l/2,200))
+		ecran.blit(version, (l/2,300)) 
+		ecran.blit(Annee, (l/2,400))
+
+		time.sleep(0.002)
+		pygame.display.flip()
+
+
+		
+		
+
 
 """
 while jeu:
@@ -196,6 +249,6 @@ while jeu:
 	pygame.display.flip()
 """
 
-# intro()
-menu()
+intro()
+
 
