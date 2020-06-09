@@ -122,11 +122,11 @@ def menu():
 	music("data/music/menu.mp3")
 	jeu = True
 		## Textes au repos
-	optiontxt = texte("Options",80)
+	optiontxt = texte("Infos",80)
 	Jouertxt = texte("Jouer",80)
 	Quittertxt = texte("Quitter",80)
 		## Textes quand la souris passe dessus
-	optiontxtS = texte("Options",100)
+	optiontxtS = texte("Infos",100)
 	JouertxtS = texte("Jouer",100)
 	QuittertxtS = texte("Quitter",100) 
 
