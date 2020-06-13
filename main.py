@@ -266,7 +266,7 @@ while jeu:
 	pygame.display.flip()
 """
 
-menu()
+intro()
 
 
 
