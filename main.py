@@ -19,7 +19,7 @@ try:
 	pygame.mixer.pre_init(44100,-16,2,2048)
 	pygame.mixer.init()
 except pygame.error:
-	()
+	print("Avertissement #2 : Aucune interface audio trouvée  ")
 
 
 """
@@ -31,7 +31,7 @@ l,h = pygame.display.Info().current_w,pygame.display.Info().current_h
 ecran = pygame.display.set_mode((l,h- 100))
 
 	## Ligne pour bloquer les messages dans le terminal
-#os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 """
 ------------------------------  FONCTIONS INTERMEDIAIRES  ------------------------------	
@@ -69,8 +69,20 @@ def music(chemin):
 		pygame.mixer.music.load(chemin)  
 		pygame.mixer.music.play(-1)
 	except pygame.error:
-		()
-
+		v = os.path.exists(chemin)	## Vérifie si le fichier existe
+		if not v:
+			raise Exception("Erreur #1 : Le fichier audio n'a pas été trouvé -> {}".format(chemin))
+		
+def image(chemin,x,y):
+	"""Creer une instance image de dimension x*y """
+	try:
+		img = pygame.image.load(chemin)
+		img = pygame.transform.scale(img, (x, y))
+		return img
+	except pygame.error :
+		v = os.path.exists(chemin)	## Vérifie si le fichier existe
+		if not v:
+			raise Exception("Erreur #3 : Le fichier image n'a pas été trouvé -> {}".format(chemin))
 
 """
 ------------------------------  SCENES DU JEU  ------------------------------
@@ -180,12 +192,17 @@ def menu():
 		time.sleep(0.002)
 		pygame.display.flip()
 
+
+		
+
 def info():
 	jeu = True
-	flecheNorm = pygame.image.load("data/picture/Back_Arrow.png")
-	flecheNorm = pygame.transform.scale(flecheNorm, (100, 100))
-	flecheBig = pygame.image.load("data/picture/Back_Arrow.png")
-	flecheBig = pygame.transform.scale(flecheBig, (150, 150))
+	flecheNorm = image("data/picture/Back_Arrow.png",100,100)
+	flecheBig = image("data/picture/Back_Arrow.png",150,150)
+	# flecheNorm = pygame.image.load("data/picture/Back_Arrow.png")
+	# flecheNorm = pygame.transform.scale(flecheNorm, (100, 100))
+	# flecheBig = pygame.image.load("data/picture/Back_Arrow.png")
+	# flecheBig = pygame.transform.scale(flecheBig, (150, 150))
 
 	Titre = texte("Titre",100)
 	create = texte("Jeu Créé par Louis-Victor et Léo",50)
@@ -249,6 +266,9 @@ while jeu:
 	pygame.display.flip()
 """
 
-intro()
+menu()
+
+
+
 
 
