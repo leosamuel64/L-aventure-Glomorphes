@@ -2,6 +2,8 @@
 
 Ce jeu a été réalisé dans le cadre de mini projet d'informatique en MPSI
 
+Testé avec python 3.5.3
+
 ## Installation
 ``` Bash
 >> sudo apt-get update
