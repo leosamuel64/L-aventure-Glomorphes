@@ -238,6 +238,42 @@ def info():
 		time.sleep(0.002)
 		pygame.display.flip()
 
+def jeuEspace():
+	jeu = True
+	fusée = image("data/picture/fusee.png",100,100)
+	# fuséeflamme = image("data/picture/fuseeflamme.png",100,100)
+	angle = 0
+	incr_angle = 90
+	x,y= l/2,h/2
+	
+
+	while jeu:
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				jeu = False
+			if event.type == KEYDOWN:
+				if event.key == K_ESCAPE:
+					jeu = False
+				if event.key == K_z:
+					print("Z")
+				if event.key == K_s:
+					print("S")
+				if event.key == K_d:
+					fusée = pygame.transform.rotate(fusée, incr_angle)
+					print("d")
+				if event.key == K_q:
+					fusée = pygame.transform.rotate(fusée, incr_angle)
+					print("q")
+
+		# fusée = pygame.transform.rotate(fusée, angle)
+		ecran.fill((0,0,0))
+		# ecran.blit(fond,(0,0))
+		ecran.blit(fusée, (x,y)) # perso
+		time.sleep(0.002)
+		pygame.display.flip()
+
+
+
 
 		
 		
@@ -266,7 +302,8 @@ while jeu:
 	pygame.display.flip()
 """
 
-intro()
+jeuEspace()
+
 
 
 
