@@ -18,7 +18,7 @@ Testé avec python 3.5.3
 ```Bash
 >> sudo apt-get install python3-pip  
 ```
-- Installation de la bibliothèque 
+- Installation de la bibliothèque :
 ```Bash
 >> sudo pip3 install pygame
 ```
@@ -30,7 +30,7 @@ Testé avec python 3.5.3
 
 Pour jouer : 
 ```Bash
->> cd MiniProjetIPT.git
+>> cd MiniProjetIPT
 >> python3 main.py
 ```
 
