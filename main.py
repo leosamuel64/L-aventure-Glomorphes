@@ -346,13 +346,10 @@ while jeu:
 	pygame.display.flip()
 """
 
-<<<<<<< HEAD
 jeuEspace()
 
-=======
 l , h = select_taille_ecran()
 ecran = pygame.display.set_mode((l,h))
->>>>>>> 510963f2cab6d52788037f1646bbe3590429bb91
 
 
 
