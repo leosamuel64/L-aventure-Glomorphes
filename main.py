@@ -26,9 +26,9 @@ except pygame.error:
 ------------------------------  PARAMETRES  ------------------------------
 """
 	## On récupère la taille de l'ecran
-l,h = pygame.display.Info().current_w,pygame.display.Info().current_h  
+# l,h = pygame.display.Info().current_w,pygame.display.Info().current_h  
 	## On créer la fenêtre du jeu
-ecran = pygame.display.set_mode((l,h- 100))
+# ecran = pygame.display.set_mode((l,h- 100))
 
 	## Ligne pour bloquer les messages dans le terminal
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
@@ -87,6 +87,49 @@ def image(chemin,x,y):
 """
 ------------------------------  SCENES DU JEU  ------------------------------
 """
+
+def select_taille_ecran():
+	x,y = 100,80
+	incr = 100
+	ecran = pygame.display.set_mode((x,y))
+	t = texte("Ajustez la taille de la fenêtre avec Z-S et D-Q puis ESPACE ",int(x/9))
+	jeu = True
+
+	
+	
+	while jeu:
+		
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				jeu = False
+			if event.type == KEYDOWN:
+				if event.key == K_ESCAPE:
+					jeu = False
+				if event.key == K_z:
+					y+=incr
+					ecran = pygame.display.set_mode((x,y))
+
+				if event.key == K_s and (y-incr > 0):
+					y-=incr
+					ecran = pygame.display.set_mode((x,y))
+		
+				if event.key == K_d:
+					x+=incr
+					ecran = pygame.display.set_mode((x,y))
+		
+				if event.key == K_q and  (y-incr > 0):
+					x-=incr
+					ecran = pygame.display.set_mode((x,y))
+				
+				if event.key == K_SPACE :
+					return x,y
+			
+		ecran.fill((0,0,0))
+		ecran.blit(t, (0,0))
+		time.sleep(0.002)
+		pygame.display.flip()
+
+
 
 def intro():
 	"""
@@ -266,7 +309,8 @@ while jeu:
 	pygame.display.flip()
 """
 
-intro()
+l , h = select_taille_ecran()
+ecran = pygame.display.set_mode((l,h))
 
 
 
