@@ -25,10 +25,6 @@ except pygame.error:
 """
 ------------------------------  PARAMETRES  ------------------------------
 """
-	## On récupère la taille de l'ecran
-# l,h = pygame.display.Info().current_w,pygame.display.Info().current_h  
-	## On créer la fenêtre du jeu
-# ecran = pygame.display.set_mode((l,h- 100))
 
 	## Ligne pour bloquer les messages dans le terminal
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
