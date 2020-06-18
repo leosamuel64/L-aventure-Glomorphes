@@ -6,17 +6,17 @@ Testé avec python 3.5.3
 
 ## Installation
 ``` Bash
->> sudo apt-get update
->> sudo apt-get upgrade
+>> sudo apt update
+>> sudo apt upgrade
 ```
 - Installation des dépendances :
 
 ```Bash 
->> sudo apt-get install python-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl1.2-dev libsmpeg-dev python-numpy subversion libportmidi-dev ffmpeg libswscale-dev libavformat-dev libavcodec-dev
+>> sudo apt install python-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl1.2-dev libsmpeg-dev python-numpy subversion libportmidi-dev ffmpeg libswscale-dev libavformat-dev libavcodec-dev libfreetype6-dev
 ```
 - Installation du gestionnaire de paquet Python :
 ```Bash
->> sudo apt-get install python3-pip  
+>> sudo apt install python3-pip  
 ```
 - Installation de la bibliothèque :
 ```Bash
