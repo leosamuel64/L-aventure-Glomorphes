@@ -1,10 +1,8 @@
-import sys #importation des modules
 import os
-import pygame
 import time
 import random
+import pygame
 from pygame.locals import *
-import math
 
 """
 ------------------------------  INITIALISATION DE PYGAME  ------------------------------
@@ -92,9 +90,12 @@ def image(chemin,x,y):
 """
 
 def select_taille_ecran(x,y):
+	"""
+	Ouvre un menu pour ajuster la taille de l'écran avec Z-S et Q-D
+	"""
 	incr = 100
 	ecran = pygame.display.set_mode((x,y))
-	t = texte("Ajustez la taille de la fenêtre avec Z-S et D-Q puis ESPACE ",int(x/9))
+	t = texte("Z-S et D-Q puis ESPACE",int(x/14))
 	jeu = True
 	
 	while jeu:		
@@ -152,13 +153,13 @@ def intro():
 
 		if t < t1:
 			ecran.fill((0,0,0))
-			ecran.blit(leo, (l/2,h/2)) 
+			ecran.blit(leo, (l/2-100,h/2)) 
 		elif t<2*t1:
 			ecran.fill((0,0,0))
-			ecran.blit(Lv, (l/2,h/2)) 
+			ecran.blit(Lv, (l/2-100,h/2)) 
 		elif t<3*t1:
 			ecran.fill((0,0,0))
-			ecran.blit(presente, (l/2,h/2)) 
+			ecran.blit(presente, (l/2-100,h/2)) 
 		else:
 			menu()
 			jeu = False
@@ -236,6 +237,9 @@ def menu():
 		
 
 def info():
+	"""
+	Scene du menu info avec la version ...
+	"""
 	jeu = True
 	flecheNorm = image("data/picture/Back_Arrow.png",100,100)
 	flecheBig = image("data/picture/Back_Arrow.png",150,150)
@@ -277,6 +281,9 @@ def info():
 		pygame.display.flip()
 
 def jeuEspace():
+	"""
+	Lance le jeu spatial 
+	"""
 	music("data/music/Purple.mp3")
 
 	fusée = image("data/picture/fusee.png",100,100)
@@ -394,6 +401,15 @@ def jeuEspace():
 		txtVitesse=texte("Vitesse de la fusée : "+str((int(abs(momentumX)+abs(momentumY)))*1000)+" m/s",30)
 		txtDistance = texte("Distance vers l'objectif : "+str(int(Distance))+" m",30)
 
+		# On verifie les touches enfoncées pour l'animation de la fusée
+
+		pressed = pygame.key.get_pressed()
+
+		if pressed[K_z] or pressed[K_s] or pressed[K_q] or pressed[K_d]:
+			feu = True
+		else:
+			feu = False
+
 		# On affiche nos images 
 		ecran.blit(fond,(0,0))
 		ecran.blit(txtPV,(20,20))
@@ -401,7 +417,8 @@ def jeuEspace():
 		ecran.blit(txtDistance,(20,60))
 		ecran.blit(asteroide,(xast1,yast1))
 		ecran.blit(asteroide2,(xast2,yast2))
-		if abs(momentumX)>0 or abs(momentumY)>0:
+
+		if feu:
 			ecran.blit(fuséeflamme, (x,y))
 		else:
 			ecran.blit(fusée, (x,y)) 
@@ -411,13 +428,14 @@ def jeuEspace():
 
 
 """
-------------------------------  LANCEMENT  ------------------------------
+------------------------------  LANCEMENT DU JEU ------------------------------
 """
 
 l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
+jeuEspace()
+# intro()
 
-intro()
 
 
 
