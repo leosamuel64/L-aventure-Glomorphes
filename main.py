@@ -433,8 +433,8 @@ def jeuEspace():
 
 l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
-jeuEspace()
-# intro()
+
+intro()
 
 
 
