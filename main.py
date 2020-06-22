@@ -469,7 +469,7 @@ Tz,Ts,Tq,Td,Tv = select_key()
 l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
 
-intro()
+## Appeller la fonction ici
 
 
 
