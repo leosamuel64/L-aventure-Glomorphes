@@ -1,6 +1,7 @@
 import os
 import time
 import random
+import math
 import pygame
 from pygame.locals import *
 
@@ -19,6 +20,8 @@ try:
 	pygame.mixer.init()
 except pygame.error:
 	print("Avertissement #2 : Aucune interface audio trouvée  ")
+
+pygame.display.set_caption("Glomorphe Adventure")
 
 
 """
@@ -83,6 +86,20 @@ def image(chemin,x,y):
 		v = os.path.exists(chemin)	## Vérifie si le fichier existe
 		if not v:
 			raise Exception("Erreur #3 : Le fichier image n'a pas été trouvé -> {}".format(chemin))
+
+def sautY(y,t,tmax,incr):
+	
+	if t<tmax/2:
+		y-=incr
+		State=True
+	elif t>tmax/2 and t<tmax: 
+		y+=incr
+		State=True
+	else:
+		State=False
+
+	return y, State
+	
 
 """
 ------------------------------  SCENES DU JEU  ------------------------------
@@ -479,6 +496,64 @@ def jeuEspace():
 		time.sleep(0.002)
 		pygame.display.flip()
 
+def plateforme():
+	persoD = image("data/picture/persoD.png",30,30)
+	persoG = image("data/picture/persoG.png",30,30)
+	persoDJump = image("data/picture/persoDJump.png",30,30)
+	persoGJump = image("data/picture/persoGJump.png",30,30)
+	jeu = True
+	JumpState = False
+	tsaut = 0
+	vitesse = 5
+	incr = 0.002
+	head="D"
+
+	x,y = 10, h-50
+	pygame.key.set_repeat(1,20)
+	while jeu:
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				jeu = False
+			if event.type == KEYDOWN:
+				if event.key == K_ESCAPE:
+					jeu = False
+
+				if event.key  == Tz and JumpState==False:
+					JumpState = True
+				if event.key == Ts:
+					()
+				if event.key == Td:
+					x+=vitesse
+					head = "D"
+				if event.key == Tq:
+					x-=vitesse
+					head = "G"
+
+		if JumpState:
+			y, JumpState = sautY(y,tsaut,0.5,0.2)
+			tsaut+=incr
+		else:
+			tsaut=0
+		
+		
+
+		
+		ecran.fill((0,0,0))
+
+		if head == "D" and not JumpState:
+			ecran.blit(persoD,(x,y))
+		elif head == "G" and not JumpState:
+			ecran.blit(persoG,(x,y))
+		elif head == "G" and JumpState:
+			ecran.blit(persoGJump,(x,y))
+		elif head =="D" and JumpState:
+			ecran.blit(persoDJump,(x,y))
+
+
+		pygame.display.flip()
+
+
+
 
 """
 ------------------------------  LANCEMENT DU JEU ------------------------------
@@ -490,13 +565,15 @@ l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
 
 ## Appeller la fonction ici
-transition(["Le brave M. X à perdu ses 4 glomorphes !! Il doit les retrouver !", 
-			"Qui les a donc volée ?! Il trouve un indice, une base de données SQL. ",
-			"Après maintes requêtes et sous requêtes, toutes les pistes mène vers une planète,", 
-			"au fin fond de l'espace “euclidien” !",
-			" ",
-			"       Appuyez sur la touche valider pour continuer ..."],print)
+# transition(["Le brave M. X à perdu ses 4 glomorphes !! Il doit les retrouver !", 
+# 			"Qui les a donc volée ?! Il trouve un indice, une base de données SQL. ",
+# 			"Après maintes requêtes et sous requêtes, toutes les pistes mène vers une planète,", 
+# 			"au fin fond de l'espace “euclidien” !",
+# 			" ",
+# 			"       Appuyez sur la touche valider pour continuer ..."],print)
 
+
+plateforme()
 
 
 
