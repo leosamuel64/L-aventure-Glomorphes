@@ -34,6 +34,20 @@ Pour jouer :
 >> python3 main.py
 ```
 
+Le jeu va vous demandez d'appuyer sur les touches dans l'ordre pour :  
+- Avancer  
+- Reculer  
+- Aller à gauche 
+- Aller à droite  
+- Valider  
+
+Ensuite, reglez la taille de la fenêtre du jeu avec les touches définies précédemment.  
+
+Utilisez maintenant la souris et les touches sélectionnées pour jouer !
+
+## Image du jeu
+![Jeu Spatial](/data/readme/espace.gif)
+
 ## Erreur et Avertissement
 - Erreur :
 	- #1 : Un fichier audio n'a pas été trouvé. Vérifier qu'il est bien présent dans le dossier /data/music.

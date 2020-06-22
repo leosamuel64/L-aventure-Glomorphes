@@ -24,7 +24,6 @@ except pygame.error:
 """
 ------------------------------  PARAMETRES  ------------------------------
 """
-
 	## Ligne pour bloquer les messages dans le terminal
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
@@ -95,7 +94,7 @@ def select_taille_ecran(x,y):
 	"""
 	incr = 100
 	ecran = pygame.display.set_mode((x,y))
-	t = texte("Z-S et D-Q puis ESPACE",int(x/14))
+	t = texte("Haut/Bas et Droite/Gauche puis valider",int(x/14))
 	jeu = True
 	
 	while jeu:		
@@ -106,25 +105,55 @@ def select_taille_ecran(x,y):
 				if event.key == K_ESCAPE:
 					jeu = False
 
-				if event.key == K_z:
+				if event.key == Tz:
 					y+=incr
 					ecran = pygame.display.set_mode((x,y))
-				if event.key == K_s and (y-incr > 0):
+				if event.key == Ts and (y-incr > 0):
 					y-=incr
 					ecran = pygame.display.set_mode((x,y))
-				if event.key == K_d:
+				if event.key == Td:
 					x+=incr
 					ecran = pygame.display.set_mode((x,y))
-				if event.key == K_q and  (y-incr > 0):
+				if event.key == Tq and  (y-incr > 0):
 					x-=incr
 					ecran = pygame.display.set_mode((x,y))
-				if event.key == K_SPACE :
+				if event.key == Tv :
 					return x,y
 			
 		ecran.fill((0,0,0))
 		ecran.blit(t, (0,0))
 		time.sleep(0.002)
 		pygame.display.flip()
+
+def select_key():
+	z=texte("Touche pour aller en haut",20)
+	s=texte("Touche pour aller en bas",20)
+	q=texte("Touche pour aller à gauche",20)
+	d=texte("Touche pour aller à droite",20)
+	v=texte("Touche pour valider",20)
+	listdetexte=[z,s,q,d,v]
+	push=[]
+	jeu = True
+	num =0
+	while jeu:
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				jeu = False
+			if event.type == KEYDOWN:
+				push.append(event.key)
+				num+=1		
+		ecran.fill((0,0,0))
+		try:
+			ecran.blit(listdetexte[num],(10,10))
+		except IndexError:
+			jeu=False
+			print(push)
+
+			return push[0],push[1],push[2],push[3],push[4]
+				
+		time.sleep(0.016)
+		pygame.display.flip()
+
 
 
 
@@ -323,13 +352,13 @@ def jeuEspace():
 				if event.key == K_ESCAPE:
 					jeu = False
 
-				if event.key == K_z:
+				if event.key == Tz:
 					momentumY-=vitesse
-				if event.key == K_s:
+				if event.key == Ts:
 					momentumY+=vitesse
-				if event.key == K_d:
+				if event.key == Td:
 					momentumX+=vitesse
-				if event.key == K_q:
+				if event.key == Tq:
 					momentumX-=vitesse
 		
 		# Test pour empecher la fusée de sortir de l'image
@@ -405,7 +434,7 @@ def jeuEspace():
 
 		pressed = pygame.key.get_pressed()
 
-		if pressed[K_z] or pressed[K_s] or pressed[K_q] or pressed[K_d]:
+		if pressed[Tz] or pressed[Ts] or pressed[Tq] or pressed[Td]:
 			feu = True
 		else:
 			feu = False
@@ -431,6 +460,8 @@ def jeuEspace():
 ------------------------------  LANCEMENT DU JEU ------------------------------
 """
 
+ecran = pygame.display.set_mode((1080,500))
+Tz,Ts,Tq,Td,Tv = select_key()
 l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
 
