@@ -134,7 +134,6 @@ def select_key():
 	q=texte("Touche pour aller à gauche",20)
 	d=texte("Touche pour aller à droite",20)
 	v=texte("Touche pour valider",20)
-	print(v)
 	listdetexte=[z,s,q,d,v]
 	push=[]
 	jeu = True
@@ -151,7 +150,6 @@ def select_key():
 			ecran.blit(listdetexte[num],(10,10))
 		except IndexError:
 			jeu=False
-			print(push)
 
 			return push[0],push[1],push[2],push[3],push[4]
 				
