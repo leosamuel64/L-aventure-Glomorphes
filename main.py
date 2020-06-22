@@ -92,14 +92,38 @@ def sautY(y,t,tmax,incr):
 	if t<tmax/2:
 		y-=incr
 		State=True
-	elif t>tmax/2 and t<tmax: 
-		y+=incr
-		State=True
 	else:
 		State=False
 
 	return y, State
+
+def rectangle(x,y,a,b):
+	return (HitBox(a,b,a+x,b+y),image("data/picture/bloc.png",x,y),(a,b))
+
+tableau = [	[0,0,0,0,0,0,0,0,0,0],
+			[1,0,0,0,0,0,0,0,0,0],
+			[1,0,0,0,0,0,0,0,0,0],
+			[1,0,1,0,1,0,1,0,1,1],
+			[0,0,0,0,0,0,0,0,0,1],
+			[0,0,0,0,0,0,0,0,0,1],
+			[0,0,0,0,0,0,0,0,1,1],
+			[0,0,0,0,0,1,1,1,0,0],
+			[0,0,0,1,1,0,0,0,0,1],
+			[1,1,0,1,1,1,1,1,1,0]
+]
 	
+def MatrixToMap(Mat,calc):
+	xUnit = l/len(Mat)
+	yUnit = h/len(Mat[0])
+	supportHit = []
+	for i in range (len(Mat)):
+		for j in range (len(Mat[0])):
+			if Mat[i][j]==1:
+				if calc:
+					supportHit.append([(j*xUnit,i*yUnit),((j+1)*xUnit,(i+1)*yUnit)])
+				ecran.blit(image("data/picture/roche.png",int(xUnit),int(yUnit)),(j*xUnit,i*yUnit))
+	return supportHit
+
 
 """
 ------------------------------  SCENES DU JEU  ------------------------------
@@ -497,20 +521,29 @@ def jeuEspace():
 		pygame.display.flip()
 
 def plateforme():
-	persoD = image("data/picture/persoD.png",30,30)
-	persoG = image("data/picture/persoG.png",30,30)
-	persoDJump = image("data/picture/persoDJump.png",30,30)
-	persoGJump = image("data/picture/persoGJump.png",30,30)
+	persodimX =  int(l/10)
+	persodimY =	 int(h/10)
+	persoD = image("data/picture/persoD.png",persodimX,persodimY)
+	persoG = image("data/picture/persoG.png",persodimX,persodimY)
+	persoDJump = image("data/picture/persoDJump.png",persodimX,persodimY)
+	persoGJump = image("data/picture/persoGJump.png",persodimX,persodimY)
 	jeu = True
 	JumpState = False
 	tsaut = 0
 	vitesse = 5
 	incr = 0.002
 	head="D"
+	bloc = image("data/picture/bloc.png",30,30)
+	support = False
 
-	x,y = 10, h-50
+
+	x,y = 5, 8*(h/10)+5
+
+	Support = MatrixToMap(tableau,True)
+
 	pygame.key.set_repeat(1,20)
 	while jeu:
+		ecran.fill((0,0,0))
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				jeu = False
@@ -522,23 +555,26 @@ def plateforme():
 					JumpState = True
 				if event.key == Ts:
 					()
-				if event.key == Td:
+				if event.key == Td and x < l-1-persodimX:
 					x+=vitesse
 					head = "D"
-				if event.key == Tq:
+				if event.key == Tq and x >1:
 					x-=vitesse
 					head = "G"
 
 		if JumpState:
-			y, JumpState = sautY(y,tsaut,0.5,0.2)
+			y, JumpState = sautY(y,tsaut,0.1,(h*0.4)*5/500)
 			tsaut+=incr
 		else:
 			tsaut=0
-		
-		
 
-		
-		ecran.fill((0,0,0))
+		MatrixToMap(tableau,False)
+		supportbool = False
+		for i in range (len(Support)):
+			if dansBoite(Support[i],x,y+persodimY):
+				supportbool = True
+		if not supportbool and not JumpState:
+			y+=(h*0.4)*5/500
 
 		if head == "D" and not JumpState:
 			ecran.blit(persoD,(x,y))
@@ -549,8 +585,10 @@ def plateforme():
 		elif head =="D" and JumpState:
 			ecran.blit(persoDJump,(x,y))
 
-
+		time.sleep(0.002)
 		pygame.display.flip()
+
+
 
 
 
