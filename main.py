@@ -474,3 +474,5 @@ ecran = pygame.display.set_mode((l,h))
 
 
 
+
+
