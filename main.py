@@ -156,7 +156,29 @@ def select_key():
 		time.sleep(0.016)
 		pygame.display.flip()
 
+def transition(txt,suite):
+	jeu=True
+	lfont = []
+	size = 30
 
+	for i in txt:
+		lfont.append(texte(i,size))
+
+	while jeu:
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				jeu = False
+			if event.type == KEYDOWN:
+				if event.key == Tv:
+					jeu=False
+					suite()
+
+		ecran.fill((0,0,0))
+		for i in range (len(lfont)):
+			ecran.blit(lfont[i], (10,size*(i+1)))
+		time.sleep(0.002)
+		pygame.display.flip()
+			
 
 
 def intro():
@@ -468,7 +490,12 @@ l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
 
 ## Appeller la fonction ici
-
+transition(["Le brave M. X à perdu ses 4 glomorphes !! Il doit les retrouver !", 
+			"Qui les a donc volée ?! Il trouve un indice, une base de données SQL. ",
+			"Après maintes requêtes et sous requêtes, toutes les pistes mène vers une planète,", 
+			"au fin fond de l'espace “euclidien” !",
+			" ",
+			"       Appuyez sur la touche valider pour continuer ..."],print)
 
 
 
