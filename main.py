@@ -42,7 +42,7 @@ def texte(text,size):
 	textFont = f.render(text,True,(255,255,255))
 	return textFont
 
-def HitBox(x,y,sizeY,sizeX):
+def HitBox(x,y,sizeX,sizeY):
 	""" Créer une Hitbox rectangulaire de coin gauche supérieur x,y"""
 	return 	[	(x-sizeX,y-sizeY),
 				(x+sizeX,y+sizeY)
@@ -126,11 +126,15 @@ def select_taille_ecran(x,y):
 		pygame.display.flip()
 
 def select_key():
+	"""
+	Renvoie le codes des touches selectionnée par l'utilisateur 
+	"""
 	z=texte("Touche pour aller en haut",20)
 	s=texte("Touche pour aller en bas",20)
 	q=texte("Touche pour aller à gauche",20)
 	d=texte("Touche pour aller à droite",20)
 	v=texte("Touche pour valider",20)
+	print(v)
 	listdetexte=[z,s,q,d,v]
 	push=[]
 	jeu = True
