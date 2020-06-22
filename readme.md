@@ -46,7 +46,8 @@ Ensuite, reglez la taille de la fenêtre du jeu avec les touches définies préc
 Utilisez maintenant la souris et les touches sélectionnées pour jouer !
 
 ## Image du jeu
-![Jeu Spatial](/data/readme/espace.gif)
+![Jeu Spatial](data/readme/espace.gif)
+
 
 ## Erreur et Avertissement
 - Erreur :
