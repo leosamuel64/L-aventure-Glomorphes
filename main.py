@@ -97,15 +97,13 @@ def sautY(y,t,tmax,incr):
 
 	return y, State
 
-def rectangle(x,y,a,b):
-	return (HitBox(a,b,a+x,b+y),image("data/picture/bloc.png",x,y),(a,b))
 
 tableau = [	[0,0,0,0,0,0,0,0,0,0],
-			[1,0,0,0,0,0,0,0,0,0],
-			[1,0,0,0,0,0,0,0,0,0],
-			[1,0,1,0,1,0,1,0,1,1],
-			[0,0,0,0,0,0,0,0,0,1],
-			[0,0,0,0,0,0,0,0,0,1],
+			[3,0,0,0,0,0,0,0,0,0],
+			[1,1,0,0,0,0,0,0,0,0],
+			[1,0,1,0,1,0,1,0,1,2],
+			[0,0,0,0,0,0,0,0,0,2],
+			[0,0,0,0,0,0,0,0,0,2],
 			[0,0,0,0,0,0,0,0,1,1],
 			[0,0,0,0,0,1,1,1,0,0],
 			[0,0,0,1,1,0,0,0,0,1],
@@ -122,6 +120,14 @@ def MatrixToMap(Mat,calc):
 				if calc:
 					supportHit.append([(j*xUnit,i*yUnit),((j+1)*xUnit,(i+1)*yUnit)])
 				ecran.blit(image("data/picture/roche.png",int(xUnit),int(yUnit)),(j*xUnit,i*yUnit))
+			elif Mat[i][j]==2:
+				if calc:
+					supportHit.append([(j*xUnit,i*yUnit),((j+1)*xUnit,(i+1)*yUnit)])
+				ecran.blit(image("data/picture/echelle.png",int(xUnit),int(yUnit)),(j*xUnit,i*yUnit))
+			elif Mat[i][j]==3:
+				if calc:
+					supportHit.append([(j*xUnit,i*yUnit),((j+1)*xUnit,(i+1)*yUnit)])
+				ecran.blit(image("data/picture/portail.png",int(xUnit),int(yUnit)),(j*xUnit,i*yUnit))
 	return supportHit
 
 
@@ -298,7 +304,13 @@ def menu():
 				## Récupère l'état des boutons sous la forme d'un tupple 0/1 (Gauche,molette,Droite)
 			press = pygame.mouse.get_pressed()
 			if press[0] == 1:
-				jeuEspace()
+				## Appeller la fonction ici
+				transition(["Le brave M. X à perdu ses 4 glomorphes !! Il doit les retrouver !", 
+							"Qui les a donc volée ?! Il trouve un indice, une base de données SQL. ",
+							"Après maintes requêtes et sous requêtes, toutes les pistes mène vers une planète,", 
+							"au fin fond de l'espace “euclidien” !",
+							" ",
+							"       Appuyez sur la touche valider pour continuer ..."],jeuEspace)
 				jeu=False
 		else:
 			ecran.blit(Jouertxt, jouerBox[0])
@@ -483,11 +495,18 @@ def jeuEspace():
 			invstate = False
 		if PointsVie==0:
 			jeu=False
+			jeuEspace()
 
 		# On update la distance avec la vitesse de la fusée
 		Distance -= ((abs(momentumX)+abs(momentumY))*1000)*0.002
 		if Distance < 10:
-			# TODO : LANCER LA SUITE
+			transition(["Victoire ! je viens de retrouver Arthur, le glomorphe à rayure !", 
+							"Il me prévient que ses camarades sont retenus  par une entité barbare",
+							"Je me met alors en route vers cette horreur sans nom !", 
+							"Il se pose sur la planète et se retrouve face à une falaise qu’il doit escalader” !",
+							"pour continuer son aventure ! Mais où peut bien mener ce portail ?",
+							" ",
+							"       Appuyez sur la touche valider pour continuer ..."],plateforme)
 			jeu = False
 
 		# On update les textes
@@ -533,8 +552,10 @@ def plateforme():
 	vitesse = 5
 	incr = 0.002
 	head="D"
-	bloc = image("data/picture/bloc.png",30,30)
-	support = False
+	# bloc = image("data/picture/bloc.png",30,30)
+	supportbool = False
+	SupportD = False
+	SupportG = False
 
 
 	x,y = 5, 8*(h/10)+5
@@ -551,30 +572,58 @@ def plateforme():
 				if event.key == K_ESCAPE:
 					jeu = False
 
-				if event.key  == Tz and JumpState==False:
+				if event.key  == Tz and JumpState==False and supportbool==True:
 					JumpState = True
 				if event.key == Ts:
 					()
-				if event.key == Td and x < l-1-persodimX:
-					x+=vitesse
-					head = "D"
-				if event.key == Tq and x >1:
-					x-=vitesse
-					head = "G"
+				# if event.key == Td and x < l-1-persodimX:
+				# 	x+=vitesse
+				# 	head = "D"
+
+				# if event.key == Tq and x >5:
+				# 	x-=vitesse
+				# 	head = "G"
+
+		pressed = pygame.key.get_pressed()
+
+		if pressed[Td] and x < l-1-persodimX:
+			x+=vitesse
+			head = "D"
+		if pressed[Tq] and x >5:
+			x-=vitesse
+			head = "G"
 
 		if JumpState:
-			y, JumpState = sautY(y,tsaut,0.1,(h*0.4)*5/500)
+			y, JumpState = sautY(y,tsaut,0.1,(h*0.4)*8/500)
 			tsaut+=incr
 		else:
 			tsaut=0
 
 		MatrixToMap(tableau,False)
 		supportbool = False
+
 		for i in range (len(Support)):
-			if dansBoite(Support[i],x,y+persodimY):
-				supportbool = True
+			if head == "D":
+				if dansBoite(Support[i],x+(2*x/21),y+persodimY):
+					supportbool = True
+			elif head == "G":
+				if dansBoite(Support[i],x+(2*x/21)+persodimX-(3*x/21),y+persodimY):
+					supportbool = True
+
 		if not supportbool and not JumpState:
 			y+=(h*0.4)*5/500
+
+		if dansBoite(Support[0],x+(2*x/21)+persodimX/2,y):
+			transition(["Vous trouvez Maurice le glomorphe à pois ! Mais votre agresseur", 
+							" a plus d’un tour dans son sac ! Il a fuit avec son dirigeable en plomb  ",
+							" Heureusement, qu’il en reste un ! Vous le prenez et le pourchassez !", 
+							" ",
+							"       Appuyez sur la touche valider pour continuer ..."],menu)
+			jeu=False
+
+		if y> h:
+			jeu=False
+			plateforme()
 
 		if head == "D" and not JumpState:
 			ecran.blit(persoD,(x,y))
@@ -610,8 +659,8 @@ ecran = pygame.display.set_mode((l,h))
 # 			" ",
 # 			"       Appuyez sur la touche valider pour continuer ..."],print)
 
+intro()
 
-plateforme()
 
 
 
