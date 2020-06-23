@@ -378,6 +378,8 @@ def info():
 		else:
 			ecran.blit(flecheNorm, (flecheBox[0][0],flecheBox[0][1]))
 
+## -------- AFFICHAGE --------
+
 		ecran.blit(Titre, (l/2,50))
 		ecran.blit(create, (l/2,200))
 		ecran.blit(version, (l/2,300)) 
@@ -522,6 +524,7 @@ def jeuEspace():
 			feu = True
 		else:
 			feu = False
+## -------- AFFICHAGE --------
 
 		# On affiche nos images 
 		ecran.blit(fond,(0,0))
@@ -540,31 +543,52 @@ def jeuEspace():
 		pygame.display.flip()
 
 def plateforme():
+	"""
+	Lance le jeu de Plateforme
+	"""
+
+	# Dimension du personnage
 	persodimX =  int(l/10)
 	persodimY =	 int(h/10)
+
+	# Chargement des images
 	persoD = image("data/picture/persoD.png",persodimX,persodimY)
 	persoG = image("data/picture/persoG.png",persodimX,persodimY)
 	persoDJump = image("data/picture/persoDJump.png",persodimX,persodimY)
 	persoGJump = image("data/picture/persoGJump.png",persodimX,persodimY)
+
+	# Variable de jeu
 	jeu = True
+
+	# Indique si le personnage est en train de sauter
 	JumpState = False
+
+	#Indique l'avancement du saut
 	tsaut = 0
+	
+	#Vitesse de marche
 	vitesse = 5
+
+	#Vitesse de saut
 	incr = 0.002
+
+	# Direction de la vision ("G"/"D")
 	head="D"
-	# bloc = image("data/picture/bloc.png",30,30)
+
+	# Indique si le pesronnage est sur/dans un support
 	supportbool = False
-	SupportD = False
-	SupportG = False
 
-
+	# On définit la position initiale du personnage
 	x,y = 5, 8*(h/10)+5
 
+	# On calcul les hitbox des supports
 	Support = MatrixToMap(tableau,True)
 
+	# Gestion de la répétition des touches
 	pygame.key.set_repeat(1,20)
+
+	## Boucle du jeu
 	while jeu:
-		ecran.fill((0,0,0))
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				jeu = False
@@ -572,20 +596,12 @@ def plateforme():
 				if event.key == K_ESCAPE:
 					jeu = False
 
+				# Detection du saut
 				if event.key  == Tz and JumpState==False and supportbool==True:
 					JumpState = True
-				if event.key == Ts:
-					()
-				# if event.key == Td and x < l-1-persodimX:
-				# 	x+=vitesse
-				# 	head = "D"
 
-				# if event.key == Tq and x >5:
-				# 	x-=vitesse
-				# 	head = "G"
-
+		# Detection de la marche
 		pressed = pygame.key.get_pressed()
-
 		if pressed[Td] and x < l-1-persodimX:
 			x+=vitesse
 			head = "D"
@@ -593,15 +609,15 @@ def plateforme():
 			x-=vitesse
 			head = "G"
 
+		# Gestion du saut
 		if JumpState:
 			y, JumpState = sautY(y,tsaut,0.1,(h*0.4)*8/500)
 			tsaut+=incr
 		else:
 			tsaut=0
 
-		MatrixToMap(tableau,False)
+		# On calcul si le joueur est sur un support (## TODO : rprogrammer avec une while)
 		supportbool = False
-
 		for i in range (len(Support)):
 			if head == "D":
 				if dansBoite(Support[i],x+(2*x/21),y+persodimY):
@@ -610,9 +626,11 @@ def plateforme():
 				if dansBoite(Support[i],x+(2*x/21)+persodimX-(3*x/21),y+persodimY):
 					supportbool = True
 
+		# On gère la chute si le personnage n'est pas sur un support
 		if not supportbool and not JumpState:
 			y+=(h*0.4)*5/500
 
+		# On gere la fin du jeu si on touche le portail
 		if dansBoite(Support[0],x+(2*x/21)+persodimX/2,y):
 			transition(["Vous trouvez Maurice le glomorphe à pois ! Mais votre agresseur", 
 							" a plus d’un tour dans son sac ! Il a fuit avec son dirigeable en plomb  ",
@@ -621,10 +639,19 @@ def plateforme():
 							"       Appuyez sur la touche valider pour continuer ..."],menu)
 			jeu=False
 
+		# On gère le respawn du personnage si il tombe dans un trou
 		if y> h:
 			jeu=False
 			plateforme()
 
+## -------- AFFICHAGE --------
+
+		ecran.fill((0,0,0))
+
+		# On affiche les supports
+		MatrixToMap(tableau,False)
+
+		# On gère l'animation du personnage
 		if head == "D" and not JumpState:
 			ecran.blit(persoD,(x,y))
 		elif head == "G" and not JumpState:
@@ -638,10 +665,6 @@ def plateforme():
 		pygame.display.flip()
 
 
-
-
-
-
 """
 ------------------------------  LANCEMENT DU JEU ------------------------------
 """
@@ -651,15 +674,9 @@ Tz,Ts,Tq,Td,Tv = select_key()
 l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
 
-## Appeller la fonction ici
-# transition(["Le brave M. X à perdu ses 4 glomorphes !! Il doit les retrouver !", 
-# 			"Qui les a donc volée ?! Il trouve un indice, une base de données SQL. ",
-# 			"Après maintes requêtes et sous requêtes, toutes les pistes mène vers une planète,", 
-# 			"au fin fond de l'espace “euclidien” !",
-# 			" ",
-# 			"       Appuyez sur la touche valider pour continuer ..."],print)
 
-intro()
+# intro()
+plateforme()
 
 
 
