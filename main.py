@@ -593,6 +593,7 @@ def plateforme():
 	"""
 	Lance le jeu de Plateforme
 	"""
+	music("data/music/GoinOn.mp3")
 
 	# Dimension du personnage
 	persodimX =  int(l/10)
@@ -778,9 +779,9 @@ l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
 
 
-# intro()
+intro()
 
-jeuTir()
+
 
 
 
