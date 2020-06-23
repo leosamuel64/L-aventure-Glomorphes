@@ -718,6 +718,7 @@ def jeuTir():
 	viseurdimX = int(l/20)
 	viseurdimY = int(h/20)
 	viseur = image("data/picture/viseur.png",viseurdimX,viseurdimY)
+	fond = image("data/picture/Melanesiefond.png",l,h)
 	reste = 30
 	resteTexte = texte("Il y a encore "+str(reste)+" lynx",30)
 
@@ -726,7 +727,8 @@ def jeuTir():
 	xcible = 0
 	ycible = 0
 
-	
+	tmax = random.random()*(2*h)/10*1080
+
 	cibleHit = MatrixToLynx(lynx,True)
 	while jeu:
 		for event in pygame.event.get():
@@ -740,8 +742,15 @@ def jeuTir():
 			randx = random.randint(1,len(lynx[0])-1)
 			randy = random.randint(1,len(lynx)-1)
 			lynx[randx][randy] = 1
+			tmax = random.random()*5
 			lynxState = True
 
+		tmax-= 0.02
+
+		if tmax < 0:
+			lynxState=False
+			lynx[randx][randy] = 0
+		print(tmax)
 
 		x,y = pygame.mouse.get_pos()
 		
@@ -752,6 +761,9 @@ def jeuTir():
 					lynxState = False
 					lynx[randx][randy] = 0
 					reste-=1
+					ecran.fill((255,0,0))
+					time.sleep(0.1)
+					pygame.display.flip()
 
 		resteTexte = texte("Il y a encore "+str(reste)+" lynx",30)
 
@@ -759,14 +771,14 @@ def jeuTir():
 			## Suite
 			jeu = False
 
-		ecran.fill((0,0,0))
+		ecran.blit(fond,(0,0))
 		ecran.blit(resteTexte,(20,20))
 		cibleHit = MatrixToLynx(lynx,True)
 
 		ecran.blit(viseur,(x-viseurdimX/2,y-viseurdimY/2))
 		time.sleep(0.002)
 		pygame.display.flip()
-
+		
 
 
 """
@@ -779,7 +791,9 @@ l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
 
 
-intro()
+# intro()
+
+jeuTir()
 
 
 
