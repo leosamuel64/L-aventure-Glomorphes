@@ -130,6 +130,55 @@ def MatrixToMap(Mat,calc):
 				ecran.blit(image("data/picture/portail.png",int(xUnit),int(yUnit)),(j*xUnit,i*yUnit))
 	return supportHit
 
+lynx1 = [	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+
+lynx = [	[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0,0,0,0,0],
+]
+
+def MatrixToLynx(Mat,calc):
+	xUnit = l/len(Mat)
+	yUnit = h/len(Mat[0])
+	supportHit = []
+	for i in range (len(Mat)):
+		for j in range (len(Mat[0])):
+			if Mat[i][j]==1:
+				if calc:
+					supportHit.append([(j*xUnit,i*yUnit),((j+1)*xUnit,(i+1)*yUnit)])
+				ecran.blit(image("data/picture/lynx.png",int(xUnit),int(yUnit)),(j*xUnit,i*yUnit))
+			
+	return supportHit
+
 
 """
 ------------------------------  SCENES DU JEU  ------------------------------
@@ -377,8 +426,6 @@ def info():
 				jeu=False
 		else:
 			ecran.blit(flecheNorm, (flecheBox[0][0],flecheBox[0][1]))
-
-## -------- AFFICHAGE --------
 
 		ecran.blit(Titre, (l/2,50))
 		ecran.blit(create, (l/2,200))
@@ -664,6 +711,62 @@ def plateforme():
 		time.sleep(0.002)
 		pygame.display.flip()
 
+def jeuTir():
+	jeu = True
+
+	viseurdimX = int(l/20)
+	viseurdimY = int(h/20)
+	viseur = image("data/picture/viseur.png",viseurdimX,viseurdimY)
+	reste = 30
+	resteTexte = texte("Il y a encore "+str(reste)+" lynx",30)
+
+	lynxState = False
+
+	xcible = 0
+	ycible = 0
+
+	
+	cibleHit = MatrixToLynx(lynx,True)
+	while jeu:
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				jeu = False
+			if event.type == KEYDOWN:
+				if event.key == K_ESCAPE:
+					jeu = False
+
+		if not lynxState:
+			randx = random.randint(1,len(lynx[0])-1)
+			randy = random.randint(1,len(lynx)-1)
+			lynx[randx][randy] = 1
+			lynxState = True
+
+
+		x,y = pygame.mouse.get_pos()
+		
+		for i in range (len(cibleHit)):
+			if dansBoite(cibleHit[i], x-viseurdimX/2, y-viseurdimY/2):
+				press = pygame.mouse.get_pressed()
+				if press[0] == 1:
+					lynxState = False
+					lynx[randx][randy] = 0
+					reste-=1
+
+		resteTexte = texte("Il y a encore "+str(reste)+" lynx",30)
+
+		if reste == 0:
+			## Suite
+			jeu = False
+
+		ecran.fill((0,0,0))
+		ecran.blit(resteTexte,(20,20))
+		cibleHit = MatrixToLynx(lynx,True)
+
+		ecran.blit(viseur,(x-viseurdimX/2,y-viseurdimY/2))
+		time.sleep(0.002)
+		pygame.display.flip()
+
+
 
 """
 ------------------------------  LANCEMENT DU JEU ------------------------------
@@ -675,7 +778,9 @@ l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
 
 
-intro()
+# intro()
+
+jeuTir()
 
 
 
