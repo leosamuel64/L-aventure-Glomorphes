@@ -179,6 +179,8 @@ def MatrixToLynx(Mat,calc):
 			
 	return supportHit
 
+def vide():
+	return ()
 
 """
 ------------------------------  SCENES DU JEU  ------------------------------
@@ -684,7 +686,7 @@ def plateforme():
 							" a plus d’un tour dans son sac ! Il a fuit avec son dirigeable en plomb  ",
 							" Heureusement, qu’il en reste un ! Vous le prenez et le pourchassez !", 
 							" ",
-							"       Appuyez sur la touche valider pour continuer ..."],menu)
+							"       Appuyez sur la touche valider pour continuer ..."],jeuTir)
 			jeu=False
 
 		# On gère le respawn du personnage si il tombe dans un trou
@@ -768,7 +770,12 @@ def jeuTir():
 		resteTexte = texte("Il y a encore "+str(reste)+" lynx",30)
 
 		if reste == 0:
-			## Suite
+			transition(["Il est dos au mur, je peux enfin le discerner mais … horreur ! ", 
+							" C’est le plus mauvais des systèmes d’exploitation !  ",
+							" Windows !!! ", 
+							" ",
+							"       Appuyez sur la touche valider pour continuer ..."],fin)
+			jeu=False
 			jeu = False
 
 		ecran.blit(fond,(0,0))
@@ -778,9 +785,94 @@ def jeuTir():
 		ecran.blit(viseur,(x-viseurdimX/2,y-viseurdimY/2))
 		time.sleep(0.002)
 		pygame.display.flip()
+
+def fin():
+	transition(["Il est dos au mur, je peux enfin le discerner mais … horreur ! ", 
+							" C’est le plus mauvais des systèmes d’exploitation !  ",
+							" Windows !!! ", 
+							" ",
+							"       Appuyez sur la touche valider pour continuer ..."],print)
+
+	windows = image("data/picture/windows.png",int(2*l/10),int(2*h/10))
+	fond= image("data/picture/donjon.png",l,h)
+
+
+	ecran.blit(fond,(0,0))
+	ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
+	pygame.display.flip()
+	time.sleep(3)
+	transition(["Mais il ne se laissera pas faire et est trop fort !!! ", 
+							" ",
+							"       Appuyez sur la touche valider pour continuer ..."],print)
+	explo = image("data/picture/explosion.png",int(3*l/10),int(3*h/10))
+
+	ecran.blit(fond,(0,0))
+	ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
+	pygame.display.flip()
+	for i in range(0,8):
+		tpdv = texte("Vos points de vie : "+str(10-i),30)
+		ecran.blit(fond,(0,0))
+		ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
+		ecran.blit(explo,(random.randint(0,l),random.randint(0,h)))
+		ecran.blit(tpdv,(30,30))
+		pygame.display.flip()
+		time.sleep(1)
+
+	transition(["Je ne pourrai pas le vaincre seul !! ", 
+							" Il me faut de l'aide !  ",
+							" Mais qui est assez fort ?! ", 
+							" ",
+							"       Appuyez sur la touche valider pour continuer ..."],print)
+	tux = image("data/picture/TuxVide.png",int(4*l/10),int(4*h/10))
+	
+	for x in range (0,l//6):
+		ecran.blit(fond,(0,0))
+		ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
+		ecran.blit(tux,(x,h/2))
+		pygame.display.flip()
+
+	tux = image("data/picture/tux1.png",int(4*l/10),int(4*h/10))
+
+	ecran.blit(fond,(0,0))
+	ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
+	ecran.blit(tux,(l//6,h/2))
+	pygame.display.flip()
+	time.sleep(3)
+
+	tux = image("data/picture/tux2.png",int(4*l/10),int(4*h/10))
+
+	ecran.blit(fond,(0,0))
+	ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
+	ecran.blit(tux,(l//6,h/2))
+	pygame.display.flip()
+	time.sleep(3)
+	
+	fond= image("data/picture/blue.jpg",l,h)
+	jeu=True
+
+	while jeu:
+		for event in pygame.event.get():
+				if event.type == QUIT:
+					jeu = False
+				if event.type == KEYDOWN:
+					if event.key == K_ESCAPE:
+						jeu = False
+					if event.key == Tv:
+						jeu=False
+
+		ecran.blit(fond,(0,0))
 		
+		pygame.display.flip()
+		time.sleep(0.002)
 
-
+	transition(["Félicitation ! ", 
+							"Vous avez gagné !!! ",
+							"Vous retrouvez enfin votre dernier glomorphe ! ", 
+							" Le brave complexomorphe en O(n) !!! ",
+							" ",
+							"       Appuyez sur la touche valider pour continuer ..."],menu)
+	
+		
 """
 ------------------------------  LANCEMENT DU JEU ------------------------------
 """
@@ -791,9 +883,8 @@ l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
 
 
-# intro()
+intro()
 
-jeuTir()
 
 
 
