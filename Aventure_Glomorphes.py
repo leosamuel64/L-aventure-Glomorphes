@@ -264,7 +264,7 @@ def select_key():
 
 def transition(txt,suite):
 	"""
-	Affiche un texte, attend que l'utilisateur valide et passe a la suite
+	Affiche un texte, attend que l'utilisateur valide et passe à la suite
 
 	txt : Liste des textes (chaque element du tableau correspond à une ligne)
 	suite : Procédure qui ne prend pas d'argument
@@ -1041,9 +1041,7 @@ def fin():
 							"Le brave complexomorphe en O(n) !!! ",
 							" ",
 							"       Appuyez sur la touche valider pour continuer ..."],menu)
-
-
-		
+	
 """
 ------------------------------  LANCEMENT DU JEU ------------------------------
 """
@@ -1052,6 +1050,6 @@ ecran = pygame.display.set_mode((1080,500))
 Tz,Ts,Tq,Td,Tv = select_key()
 l , h = select_taille_ecran(1080,500)
 ecran = pygame.display.set_mode((l,h))
-music("data/music/intro.mp3")
+music("data/music/menu.mp3")
 
 intro()
