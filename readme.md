@@ -28,26 +28,32 @@ Testé avec python 3.5.3
 ```
 ## Utilisation
 
-Pour jouer : 
+### Pour jouer : 
 ```Bash
 >> cd MiniProjetIPT
->> python3 main.py
+>> ./Aventure_Glomorphes.py
 ```
+### Commandes
+- Le jeu va vous demandez d'appuyer sur les touches dans l'ordre pour :  
+	- Avancer  
+	- Reculer  
+	- Aller à gauche 
+	- Aller à droite  
+	- Valider  
 
-Le jeu va vous demandez d'appuyer sur les touches dans l'ordre pour :  
-- Avancer  
-- Reculer  
-- Aller à gauche 
-- Aller à droite  
-- Valider  
+### Pour le jeu Flappymorphe
+
+- Voler : ESPACE
+- Recommencer : R
+
 
 Ensuite, reglez la taille de la fenêtre du jeu avec les touches définies précédemment.  
 
 Utilisez maintenant la souris et les touches sélectionnées pour jouer !
 
-## Image du jeu
-![Jeu Spatial](data/readme/espace.gif)
-
+## Musique du jeu
+ La musique du jeu est une réalisation personnelle : 
+[Vers la musique ...](https://soundcloud.com/leo-samuel-331075331/sets/laventure-glomorphes)
 
 ## Erreur et Avertissement
 - Erreur :
