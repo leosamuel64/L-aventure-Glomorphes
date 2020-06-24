@@ -335,7 +335,6 @@ def menu():
 	"""
 	Affiche le menu
 	"""
-	music("data/music/menu.mp3")
 	jeu = True
 	
 	## Textes au repos
@@ -827,7 +826,7 @@ def flappymorphe():
 		if Score == 5:
 			ecran.blit(txtfin, (400, 400))
 			time.sleep(2)
-			transition(["Je suis trop rapide pour lui ! il a eu besoin de se délesté. ", 
+			transition(["Je suis trop rapide pour lui ! il a eu besoin de se délester. ", 
 							"Vous trouvez “Syracuse” le glomorphe aillé (connu pour son temps de vol  !).",
 							"Mais je n’ai pas dit mon dernier mot ! Il est ralentit mais ses sbires, ", 
 							"les lynx à collier de Mélanésie me barrent la route !",
@@ -935,12 +934,6 @@ def fin():
 	"""
 	Lance la fin
 	"""
-	transition(["Il est dos au mur, je peux enfin le discerner mais … horreur ! ", 
-							" C’est le plus mauvais des systèmes d’exploitation !  ",
-							" Windows !!! ", 
-							" ",
-							"       Appuyez sur la touche valider pour continuer ..."],vide)
-
 	# On charge les images
 	windows = image("data/picture/windows.png",int(2*l/10),int(2*h/10))
 	fond= image("data/picture/donjon.png",l,h)
@@ -1010,7 +1003,7 @@ def fin():
 	time.sleep(3)
 	
 	# On charge l'image
-	fond= image("data/picture/blue.jpg",l,h)
+	fond= image("data/picture/Blue.jpg",l,h)
 	
 	jeu=True
 
