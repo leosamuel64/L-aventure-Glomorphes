@@ -21,7 +21,7 @@ try:
 except pygame.error:
 	print("Avertissement #2 : Aucune interface audio trouvée  ")
 
-pygame.display.set_caption("Glomorphe Adventure")
+pygame.display.set_caption("L'aventure des Glomorphes")
 
 
 """
@@ -29,6 +29,35 @@ pygame.display.set_caption("Glomorphe Adventure")
 """
 	## Ligne pour bloquer les messages dans le terminal
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
+# On initialise la matrice pour le jeu de plateforme
+tableau = [	[0,0,0,0,0,0,0,0,0,0],
+			[3,0,0,0,0,0,0,0,0,0],
+			[1,1,0,0,0,0,0,0,0,0],
+			[1,0,1,0,1,0,1,0,1,2],
+			[0,0,0,0,0,0,0,0,0,2],
+			[0,0,0,0,0,0,0,0,0,2],
+			[0,0,0,0,0,0,0,0,1,1],
+			[0,0,0,0,0,1,1,1,0,0],
+			[0,0,0,1,1,0,0,0,0,1],
+			[1,1,0,1,1,1,1,1,1,0]
+]
+
+# On initialise la matrice pour les lynx
+lynx = [	[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0],
+]
 
 """
 ------------------------------  FONCTIONS INTERMEDIAIRES  ------------------------------	
@@ -77,7 +106,9 @@ def music(chemin):
 			raise Exception("Erreur #1 : Le fichier audio n'a pas été trouvé -> {}".format(chemin))
 		
 def image(chemin,x,y):
-	"""Creer une instance image de dimension x*y """
+	"""
+	Creer une instance image de dimension x*y 
+	"""
 	try:
 		img = pygame.image.load(chemin)
 		img = pygame.transform.scale(img, (x, y))
@@ -88,7 +119,9 @@ def image(chemin,x,y):
 			raise Exception("Erreur #3 : Le fichier image n'a pas été trouvé -> {}".format(chemin))
 
 def sautY(y,t,tmax,incr):
-	
+	"""
+	Fonction qui gère le saut du personnage
+	"""
 	if t<tmax/2:
 		y-=incr
 		State=True
@@ -96,21 +129,14 @@ def sautY(y,t,tmax,incr):
 		State=False
 
 	return y, State
-
-
-tableau = [	[0,0,0,0,0,0,0,0,0,0],
-			[3,0,0,0,0,0,0,0,0,0],
-			[1,1,0,0,0,0,0,0,0,0],
-			[1,0,1,0,1,0,1,0,1,2],
-			[0,0,0,0,0,0,0,0,0,2],
-			[0,0,0,0,0,0,0,0,0,2],
-			[0,0,0,0,0,0,0,0,1,1],
-			[0,0,0,0,0,1,1,1,0,0],
-			[0,0,0,1,1,0,0,0,0,1],
-			[1,1,0,1,1,1,1,1,1,0]
-]
 	
 def MatrixToMap(Mat,calc):
+	"""
+	Decoupe l'écran et affiche 	de la roche si Mat[i][j]=1
+								des echelles si Mat[i][j]=2
+								un portail si Mat[i][j]=3
+	Créer aussi les Hitbox associées
+	"""
 	xUnit = l/len(Mat)
 	yUnit = h/len(Mat[0])
 	supportHit = []
@@ -130,43 +156,13 @@ def MatrixToMap(Mat,calc):
 				ecran.blit(image("data/picture/portail.png",int(xUnit),int(yUnit)),(j*xUnit,i*yUnit))
 	return supportHit
 
-lynx1 = [	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
 
-lynx = [	[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0,0,0,0,0],
-]
 
 def MatrixToLynx(Mat,calc):
+	"""
+	Decoupe l'écran et affiche des lynx si Mat[i][j]=1.
+	Créer aussi les Hitbox associées
+	"""
 	xUnit = l/len(Mat)
 	yUnit = h/len(Mat[0])
 	supportHit = []
@@ -179,9 +175,6 @@ def MatrixToLynx(Mat,calc):
 			
 	return supportHit
 
-def vide():
-	return ()
-
 """
 ------------------------------  SCENES DU JEU  ------------------------------
 """
@@ -192,7 +185,10 @@ def select_taille_ecran(x,y):
 	"""
 	incr = 100
 	ecran = pygame.display.set_mode((x,y))
+	
+	# On initialise le texte  
 	t = texte("Haut/Bas et Droite/Gauche puis valider",int(x/14))
+
 	jeu = True
 	
 	while jeu:		
@@ -217,7 +213,8 @@ def select_taille_ecran(x,y):
 					ecran = pygame.display.set_mode((x,y))
 				if event.key == Tv :
 					return x,y
-			
+		
+		# Afffichage
 		ecran.fill((0,0,0))
 		ecran.blit(t, (0,0))
 		time.sleep(0.002)
@@ -227,15 +224,18 @@ def select_key():
 	"""
 	Renvoie le codes des touches selectionnée par l'utilisateur 
 	"""
+	# On initialise les textes
 	z=texte("Touche pour aller en haut",20)
 	s=texte("Touche pour aller en bas",20)
 	q=texte("Touche pour aller à gauche",20)
 	d=texte("Touche pour aller à droite",20)
 	v=texte("Touche pour valider",20)
+
 	listdetexte=[z,s,q,d,v]
 	push=[]
 	jeu = True
 	num =0
+
 	while jeu:
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -244,17 +244,23 @@ def select_key():
 				push.append(event.key)
 				num+=1		
 		ecran.fill((0,0,0))
+
 		try:
 			ecran.blit(listdetexte[num],(10,10))
 		except IndexError:
 			jeu=False
-
 			return push[0],push[1],push[2],push[3],push[4]
 				
 		time.sleep(0.016)
 		pygame.display.flip()
 
 def transition(txt,suite):
+	"""
+	Affiche un texte, attend que l'utilisateur valide et passe a la suite
+
+	txt : Liste des textes (chaque element du tableau correspond à une ligne)
+	suite : Procédure qui ne prend pas d'argument
+	"""
 	jeu=True
 	lfont = []
 	size = 30
@@ -277,12 +283,11 @@ def transition(txt,suite):
 		time.sleep(0.002)
 		pygame.display.flip()
 			
-
-
 def intro():
 	"""
 	Affiche le générique d'introduction
 	"""
+
 	jeu = True
 	music("data/music/intro.mp3")
 		## Taille de la police
@@ -325,26 +330,28 @@ def menu():
 	"""
 	music("data/music/menu.mp3")
 	jeu = True
-		## Textes au repos
+	
+	## Textes au repos
 	optiontxt = texte("Infos",80)
 	Jouertxt = texte("Jouer",80)
 	Quittertxt = texte("Quitter",80)
-		## Textes quand la souris passe dessus
+	
+	## Textes quand la souris passe dessus
 	optiontxtS = texte("Infos",100)
 	JouertxtS = texte("Jouer",100)
 	QuittertxtS = texte("Quitter",100) 
 	Merci = texte("Merci d'avoir joué !",100)
 
-		## Rectangles autour des textes
+	## Rectangles autour des textes
 	jouerBox = [(l/2,(h/2)-100),((l/2+200,(h/2)))]
 	optionBox = [(l/2,(h/2)),((l/2+200,(h/2)+100))]
 	QuitterBox = [(l/2,(h/2)+100),((l/2+230,(h/2)+200))]
 
 	while jeu:
-			## On récupère la possition de la souris
+		## On récupère la possition de la souris
 		x,y = pygame.mouse.get_pos()
 
-			## Detection de la croix
+		## Detection de la croix
 		for event in pygame.event.get():
 				if event.type == QUIT:
 					jeu = False
@@ -352,10 +359,12 @@ def menu():
 		ecran.fill((0,0,0))
 		if dansBoite(jouerBox,x,y):
 			ecran.blit(JouertxtS, jouerBox[0]) 
-				## Récupère l'état des boutons sous la forme d'un tupple 0/1 (Gauche,molette,Droite)
+			
+			## Récupère l'état des boutons sous la forme d'un tupple 0/1 (Gauche,molette,Droite)
 			press = pygame.mouse.get_pressed()
 			if press[0] == 1:
-				## Appeller la fonction ici
+				## Appeller la suite ici
+				music("data/music/GoinOn.mp3")
 				transition(["Le brave M. X à perdu ses 4 glomorphes !! Il doit les retrouver !", 
 							"Qui les a donc volée ?! Il trouve un indice, une base de données SQL. ",
 							"Après maintes requêtes et sous requêtes, toutes les pistes mène vers une planète,", 
@@ -390,26 +399,23 @@ def menu():
 		time.sleep(0.002)
 		pygame.display.flip()
 
-
-		
-
 def info():
 	"""
 	Scene du menu info avec la version ...
 	"""
 	jeu = True
+
+	# On charge les images
 	flecheNorm = image("data/picture/Back_Arrow.png",100,100)
 	flecheBig = image("data/picture/Back_Arrow.png",150,150)
-	# flecheNorm = pygame.image.load("data/picture/Back_Arrow.png")
-	# flecheNorm = pygame.transform.scale(flecheNorm, (100, 100))
-	# flecheBig = pygame.image.load("data/picture/Back_Arrow.png")
-	# flecheBig = pygame.transform.scale(flecheBig, (150, 150))
 
-	Titre = texte("Titre",100)
+	# On charge les textes
+	Titre = texte("L'aventure des Glomorphes",100)
 	create = texte("Jeu Créé par Louis-Victor et Léo",50)
 	version = texte("Version : 0.1",50)
 	Annee = texte("MPSI - 2019/2020",50)
 
+	# Hitbox de la flèche de retour
 	flecheBox = [(50,50),(150,150)]
 
 	while jeu:
@@ -441,8 +447,7 @@ def jeuEspace():
 	"""
 	Lance le jeu spatial 
 	"""
-	music("data/music/Purple.mp3")
-
+	# On charge les images
 	fusée = image("data/picture/fusee.png",100,100)
 	fuséeflamme = image("data/picture/fuseeflamme.png",100,100)
 	fond = image("data/picture/fondEspace.jpg",l,h)
@@ -450,6 +455,7 @@ def jeuEspace():
 	asteroide = image("data/picture/asteroide.png",100,100)
 	asteroide2 = image("data/picture/asteroide.png",100,100)
 
+	# On définie les paramètres
 	vitesse=0.3
 	PointsVie = 10
 	Distance = 30000
@@ -458,13 +464,16 @@ def jeuEspace():
 	xast1,yast1 = 100,100
 	xast2,yast2 = l-1,h-1
 	
+	# Variables pour simuler l'inertie des objets
 	momentumX=0
 	momentumY=0
 	momentumXast1,momentumYast1 = random.randint(1,3),random.randint(-3,3)
 	momentumXast2,momentumYast2 = random.randint(-3,3),random.randint(1,3)
 
+	# Variable qui définie si le joueur est touchable ou non 
 	invstate = False
 
+	# On charge les textes
 	txtPV = texte("Etat du fuselage : "+str(PointsVie)+" /10",30)
 	txtVitesse=texte("Vitesse de la fusée : "+str(abs(momentumX)+abs(momentumY))+" m/s",30)
 	txtDistance = texte("Distance vers l'objectif : "+str(Distance)+" m",30)
@@ -505,7 +514,7 @@ def jeuEspace():
 		xast2+= momentumXast2
 		yast2+=momentumYast2
 		
-		# Replace les astéroides
+		# Replace les astéroides si besoin
 		if xast1>l or yast1>h or xast1<0 or yast1<0:
 			rand = random.random()
 			if rand < 0.25:
@@ -535,10 +544,12 @@ def jeuEspace():
 			else:
 				xast2,yast2 = l-1,int(h/2)
 				momentumXast2,momentumYast2 = random.randint(-3,-1),random.randint(-3,-1)
+		
 		# On vérifie les collisions
 		BoxAst1 = HitBox(xast1,yast1,50,50)
 		BoxAst2 = HitBox(xast2,yast2,50,50)
 
+		# On gère les points de vie
 		if (dansBoite(BoxAst1,x,y) or dansBoite(BoxAst2,x,y)) and (not invstate):
 			PointsVie-=1
 			invstate = True
@@ -551,10 +562,11 @@ def jeuEspace():
 		# On update la distance avec la vitesse de la fusée
 		Distance -= ((abs(momentumX)+abs(momentumY))*1000)*0.002
 		if Distance < 10:
+			# On lance la Suite
 			transition(["Victoire ! je viens de retrouver Arthur, le glomorphe à rayure !", 
 							"Il me prévient que ses camarades sont retenus  par une entité barbare",
 							"Je me met alors en route vers cette horreur sans nom !", 
-							"Il se pose sur la planète et se retrouve face à une falaise qu’il doit escalader” !",
+							"Il se pose sur la planète et se retrouve face à une falaise qu’il doit escalader",
 							"pour continuer son aventure ! Mais où peut bien mener ce portail ?",
 							" ",
 							"       Appuyez sur la touche valider pour continuer ..."],plateforme)
@@ -566,13 +578,12 @@ def jeuEspace():
 		txtDistance = texte("Distance vers l'objectif : "+str(int(Distance))+" m",30)
 
 		# On verifie les touches enfoncées pour l'animation de la fusée
-
 		pressed = pygame.key.get_pressed()
-
 		if pressed[Tz] or pressed[Ts] or pressed[Tq] or pressed[Td]:
 			feu = True
 		else:
 			feu = False
+
 ## -------- AFFICHAGE --------
 
 		# On affiche nos images 
@@ -595,8 +606,6 @@ def plateforme():
 	"""
 	Lance le jeu de Plateforme
 	"""
-	music("data/music/GoinOn.mp3")
-
 	# Dimension du personnage
 	persodimX =  int(l/10)
 	persodimY =	 int(h/10)
@@ -680,7 +689,7 @@ def plateforme():
 		if not supportbool and not JumpState:
 			y+=(h*0.4)*5/500
 
-		# On gere la fin du jeu si on touche le portail
+		# On gère la fin du jeu si on touche le portail
 		if dansBoite(Support[0],x+(2*x/21)+persodimX/2,y):
 			transition(["Vous trouvez Maurice le glomorphe à pois ! Mais votre agresseur", 
 							" a plus d’un tour dans son sac ! Il a fuit avec son dirigeable en plomb  ",
@@ -715,23 +724,35 @@ def plateforme():
 		pygame.display.flip()
 
 def jeuTir():
+	"""
+	Lance le jeu de tir
+	"""
+
 	jeu = True
 
+	# Dimension du viseur (qui suivra la souris)
 	viseurdimX = int(l/20)
 	viseurdimY = int(h/20)
+
+	# On charge les images
 	viseur = image("data/picture/viseur.png",viseurdimX,viseurdimY)
 	fond = image("data/picture/Melanesiefond.png",l,h)
+	
+	# Variable qui correspond au nombre d'ennemies à éliminer
 	reste = 30
+
+	# On charge le texte
 	resteTexte = texte("Il y a encore "+str(reste)+" lynx",30)
 
+	# Variable qui indique si une cible est présente sur l'écran
 	lynxState = False
 
-	xcible = 0
-	ycible = 0
-
+	# Variable qui définie le temps que la cible reste à sa position
 	tmax = random.random()*(2*h)/10*1080
 
+	# Calcul la disposition des cibles
 	cibleHit = MatrixToLynx(lynx,True)
+
 	while jeu:
 		for event in pygame.event.get():
 			if event.type == QUIT:
@@ -740,6 +761,7 @@ def jeuTir():
 				if event.key == K_ESCAPE:
 					jeu = False
 
+		# On affiche une cible si il n'y en a pas
 		if not lynxState:
 			randx = random.randint(1,len(lynx[0])-1)
 			randy = random.randint(1,len(lynx)-1)
@@ -747,15 +769,11 @@ def jeuTir():
 			tmax = random.random()*5
 			lynxState = True
 
-		tmax-= 0.02
-
-		if tmax < 0:
-			lynxState=False
-			lynx[randx][randy] = 0
-		print(tmax)
-
+		# On recupère la position de la souris
 		x,y = pygame.mouse.get_pos()
 		
+		# On verifie si le viseur/la souris est dans une hitbox et enleve la cible si le joueur clique
+		# On met une boucle for pour pouvoir gèrer plusieurs cibles dans le futur
 		for i in range (len(cibleHit)):
 			if dansBoite(cibleHit[i], x-viseurdimX/2, y-viseurdimY/2):
 				press = pygame.mouse.get_pressed()
@@ -766,9 +784,8 @@ def jeuTir():
 					ecran.fill((255,0,0))
 					time.sleep(0.1)
 					pygame.display.flip()
-
-		resteTexte = texte("Il y a encore "+str(reste)+" lynx",30)
-
+			
+		# On gère la fin 
 		if reste == 0:
 			transition(["Il est dos au mur, je peux enfin le discerner mais … horreur ! ", 
 							" C’est le plus mauvais des systèmes d’exploitation !  ",
@@ -776,41 +793,64 @@ def jeuTir():
 							" ",
 							"       Appuyez sur la touche valider pour continuer ..."],fin)
 			jeu=False
-			jeu = False
+
+		# On retire du temps d'affichage de la cible à l'écran
+		tmax-= 0.02
+
+		# Si le temps est négatif alors on enlève la cible
+		if tmax < 0:
+			lynxState=False
+			lynx[randx][randy] = 0
+
+		# On charge le nouveau texte
+		resteTexte = texte("Il y a encore "+str(reste)+" lynx",30)
+## -------- AFFICHAGE --------
 
 		ecran.blit(fond,(0,0))
 		ecran.blit(resteTexte,(20,20))
 		cibleHit = MatrixToLynx(lynx,True)
-
 		ecran.blit(viseur,(x-viseurdimX/2,y-viseurdimY/2))
 		time.sleep(0.002)
 		pygame.display.flip()
 
 def fin():
+	"""
+	Lance la fin
+	"""
+
 	transition(["Il est dos au mur, je peux enfin le discerner mais … horreur ! ", 
 							" C’est le plus mauvais des systèmes d’exploitation !  ",
 							" Windows !!! ", 
 							" ",
 							"       Appuyez sur la touche valider pour continuer ..."],print)
 
+	# On charge les images
 	windows = image("data/picture/windows.png",int(2*l/10),int(2*h/10))
 	fond= image("data/picture/donjon.png",l,h)
 
-
+	# Affichage
 	ecran.blit(fond,(0,0))
 	ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
 	pygame.display.flip()
 	time.sleep(3)
+
 	transition(["Mais il ne se laissera pas faire et est trop fort !!! ", 
 							" ",
 							"       Appuyez sur la touche valider pour continuer ..."],print)
+	
+	# On charge l'image
 	explo = image("data/picture/explosion.png",int(3*l/10),int(3*h/10))
 
+	# Affichage
 	ecran.blit(fond,(0,0))
 	ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
 	pygame.display.flip()
+
 	for i in range(0,8):
+		# On charge le nouveau texte
 		tpdv = texte("Vos points de vie : "+str(10-i),30)
+
+		# Affichage
 		ecran.blit(fond,(0,0))
 		ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
 		ecran.blit(explo,(random.randint(0,l),random.randint(0,h)))
@@ -826,30 +866,41 @@ def fin():
 	tux = image("data/picture/TuxVide.png",int(4*l/10),int(4*h/10))
 	
 	for x in range (0,l//6):
+		# Affichage
 		ecran.blit(fond,(0,0))
 		ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
 		ecran.blit(tux,(x,h/2))
 		pygame.display.flip()
-
+	
+	# On charge l'image
 	tux = image("data/picture/tux1.png",int(4*l/10),int(4*h/10))
 
-	ecran.blit(fond,(0,0))
-	ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
-	ecran.blit(tux,(l//6,h/2))
-	pygame.display.flip()
-	time.sleep(3)
-
-	tux = image("data/picture/tux2.png",int(4*l/10),int(4*h/10))
-
+	# Affichage
 	ecran.blit(fond,(0,0))
 	ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
 	ecran.blit(tux,(l//6,h/2))
 	pygame.display.flip()
 	time.sleep(3)
 	
+	# On charge l'image
+	tux = image("data/picture/tux2.png",int(4*l/10),int(4*h/10))
+
+	# Affichage
+	ecran.blit(fond,(0,0))
+	ecran.blit(windows,(int((l/2)-int(2*l/10)/2),int(h/3)))	
+	ecran.blit(tux,(l//6,h/2))
+	pygame.display.flip()
+	time.sleep(3)
+	
+	# On charge l'image
 	fond= image("data/picture/blue.jpg",l,h)
+	
 	jeu=True
 
+	# On lance la musique de fin
+	music("data/music/Purple.mp3")
+
+	# Boucle pour attendre que le joueur valide
 	while jeu:
 		for event in pygame.event.get():
 				if event.type == QUIT:
@@ -860,15 +911,17 @@ def fin():
 					if event.key == Tv:
 						jeu=False
 
+		# Affichage
 		ecran.blit(fond,(0,0))
-		
 		pygame.display.flip()
 		time.sleep(0.002)
 
+	# Fin du jeu et retour au menu !
+	time.sleep(2)
 	transition(["Félicitation ! ", 
 							"Vous avez gagné !!! ",
 							"Vous retrouvez enfin votre dernier glomorphe ! ", 
-							" Le brave complexomorphe en O(n) !!! ",
+							"Le brave complexomorphe en O(n) !!! ",
 							" ",
 							"       Appuyez sur la touche valider pour continuer ..."],menu)
 	
@@ -884,10 +937,6 @@ ecran = pygame.display.set_mode((l,h))
 
 
 intro()
-
-
-
-
 
 
 
