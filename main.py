@@ -175,6 +175,12 @@ def MatrixToLynx(Mat,calc):
 			
 	return supportHit
 
+def vide():
+	"""
+	Ne fait rien
+	"""
+	()
+
 """
 ------------------------------  SCENES DU JEU  ------------------------------
 """
@@ -695,7 +701,7 @@ def plateforme():
 							" a plus d’un tour dans son sac ! Il a fuit avec son dirigeable en plomb  ",
 							" Heureusement, qu’il en reste un ! Vous le prenez et le pourchassez !", 
 							" ",
-							"       Appuyez sur la touche valider pour continuer ..."],jeuTir)
+							"       Appuyez sur la touche valider pour continuer ..."],flappymorphe)
 			jeu=False
 
 		# On gère le respawn du personnage si il tombe dans un trou
@@ -722,6 +728,117 @@ def plateforme():
 
 		time.sleep(0.002)
 		pygame.display.flip()
+
+def flappymorphe():
+	"""
+	Lance le jeu FlappyMorphe 
+	"""
+	fond = image("data/picture/fondFlappy.png",l,h)
+	oiseau = image("data/picture/flappybird.png",60, 60)
+	poteau1 = image("data/picture/Tuyeau.png", 70, 500)
+	poteau2 = image("data/picture/Tuyeau_2.png", 70, 500)
+
+	pygame.display.set_caption("Flappy Bird")  # Nom de la fenêtre
+
+	Score = 0
+	txtScore = texte("Score : " + str(Score), 30)
+	jumpCount = 10 # Pour augmenter la vitesse de chute
+
+	jeu = False
+
+	txtrecommencer = texte("Appuyer sur R pour recommencer", 30)
+	txtfin = texte("Félicitations !", 60)
+	det = True
+	
+	ecran.blit(fond, (0, 0))
+	ecran.blit(txtrecommencer, (400, 20))
+	pygame.display.flip()
+
+	while det:
+		for event in pygame.event.get([KEYDOWN, QUIT]):
+			if event.type == QUIT:  # Si l'évènement est de type quitter alors on arrête le programme
+				menu()
+				jeu=False
+			elif event.key == K_r:  # Si l'évènement est l'appui sur la touche "r" on joue au jeu
+				jeu = True
+				det = False
+
+	x_poteau = 1000  # Position du poteau
+	y_poteau = 450
+
+	x_poteau2 = x_poteau
+	y_poteau2 = y_poteau - 600  # Position du poteau2 (à l'envers)
+
+	x = 100  # Position de l'oiseau
+	y = 100
+
+	passed = False #Est que l'oiseau a dépassé le poteau
+	while jeu:
+		for event in pygame.event.get():
+			if event.type == QUIT:
+				jeu = False
+
+		keys = pygame.key.get_pressed()
+
+		if keys[pygame.K_SPACE]:
+			jumpCount = 11
+			y -= (jumpCount * abs(jumpCount)) * 0.05
+			jumpCount -= 1
+		elif jumpCount > -20:
+			y -= (jumpCount * abs(jumpCount)) * 0.03
+			jumpCount -= 1
+		else:
+			y -= (jumpCount * abs(jumpCount)) * 0.03
+
+		if x_poteau <=-70:
+			x_poteau = 1000
+			x_poteau2 = 1000
+			y_poteau = random.randint(210,450)
+			y_poteau2 = y_poteau - 600
+			passed = False
+		else:
+			x_poteau -= 4
+			x_poteau2 -= 4
+
+		if x>x_poteau and not passed:
+			Score += 1
+			passed = True
+
+		BoxPoteau1 = HitBox(x_poteau, y_poteau, 50,35)
+		BoxPoteau1_plus = HitBox(x_poteau+50, y_poteau+35, 50, 300)
+		BoxPoteau2 = HitBox(x_poteau2, y_poteau2, 50,460)
+
+		if (dansBoite(BoxPoteau1,x,y) or dansBoite(BoxPoteau2,x,y)):
+			jeu=False
+
+		txtScore = texte("Score : " + str(Score), 30) #Mis à jour du texte
+
+		ecran.blit(fond, (0, 0))
+		ecran.blit(oiseau, (x, y))
+		ecran.blit(poteau1, (x_poteau, y_poteau))
+		ecran.blit(poteau2, (x_poteau2, y_poteau2))
+		ecran.blit(txtScore, (20,20))
+		ecran.blit(txtrecommencer, (400, 20))
+
+		if y > 450:
+			jeu = False
+
+		if Score == 5:
+			ecran.blit(txtfin, (400, 400))
+			time.sleep(2)
+			transition(["Je suis trop rapide pour lui ! il a eu besoin de se délesté. ", 
+							"Vous trouvez “Syracuse” le glomorphe aillé (connu pour son temps de vol  !).",
+							"Mais je n’ai pas dit mon dernier mot ! Il est ralentit mais ses sbires, ", 
+							"les lynx à collier de Mélanésie me barrent la route !",
+							"Je dois m’en occuper !!",
+							" ",
+							"       Appuyez sur la touche valider pour continuer ..."],jeuTir)
+			jeu=False
+
+		time.sleep(0.002)
+		pygame.display.flip()
+		if not jeu and Score < 5:
+			flappymorphe()
 
 def jeuTir():
 	"""
@@ -817,12 +934,11 @@ def fin():
 	"""
 	Lance la fin
 	"""
-
 	transition(["Il est dos au mur, je peux enfin le discerner mais … horreur ! ", 
 							" C’est le plus mauvais des systèmes d’exploitation !  ",
 							" Windows !!! ", 
 							" ",
-							"       Appuyez sur la touche valider pour continuer ..."],print)
+							"       Appuyez sur la touche valider pour continuer ..."],vide)
 
 	# On charge les images
 	windows = image("data/picture/windows.png",int(2*l/10),int(2*h/10))
@@ -836,7 +952,7 @@ def fin():
 
 	transition(["Mais il ne se laissera pas faire et est trop fort !!! ", 
 							" ",
-							"       Appuyez sur la touche valider pour continuer ..."],print)
+							"       Appuyez sur la touche valider pour continuer ..."],vide)
 	
 	# On charge l'image
 	explo = image("data/picture/explosion.png",int(3*l/10),int(3*h/10))
@@ -862,7 +978,7 @@ def fin():
 							" Il me faut de l'aide !  ",
 							" Mais qui est assez fort ?! ", 
 							" ",
-							"       Appuyez sur la touche valider pour continuer ..."],print)
+							"       Appuyez sur la touche valider pour continuer ..."],vide)
 	tux = image("data/picture/TuxVide.png",int(4*l/10),int(4*h/10))
 	
 	for x in range (0,l//6):
@@ -917,7 +1033,7 @@ def fin():
 		time.sleep(0.002)
 
 	# Fin du jeu et retour au menu !
-	time.sleep(2)
+	time.sleep(0.5)
 	transition(["Félicitation ! ", 
 							"Vous avez gagné !!! ",
 							"Vous retrouvez enfin votre dernier glomorphe ! ", 
@@ -937,9 +1053,3 @@ ecran = pygame.display.set_mode((l,h))
 
 
 intro()
-
-
-
-
-
-
