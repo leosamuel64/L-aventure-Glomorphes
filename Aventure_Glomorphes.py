@@ -374,7 +374,7 @@ def menu():
                 transition(["Le brave M. X à perdu ses 4 glomorphes !! Il doit les retrouver !", 
                             "Qui les a donc volée ?! Il trouve un indice, une base de données SQL. ",
                             "Après maintes requêtes et sous requêtes, toutes les pistes mène vers une planète,", 
-                            "au fin fond de l'espace “euclidien” !",
+                            "au delà de l'espace euclidien : une planète torique. !",
                             " ",
                             "       Appuyez sur la touche valider pour continuer ..."],jeuEspace)
                 jeu=False
@@ -450,6 +450,8 @@ def info():
         time.sleep(0.002)
         pygame.display.flip()
 
+
+        
 def jeuEspace():
     """
     Lance le jeu spatial 
@@ -505,17 +507,16 @@ def jeuEspace():
                 if event.key == Tq:
                     momentumX-=vitesse
         
-        # Test pour empecher la fusée de sortir de l'image
-        if x>l or x<0:
-            x=l/2
-            momentumX=0
-        if y>h or y<0:
-            y=h/2
-            momentumY=0
+        
 
         # Calcul des coords pour la fusée et les astéroides
         x+= momentumX
         y+=momentumY
+        # Test pour empecher la fusée de sortir de l'image
+        # En mode torique
+        x = x % l
+        y = y % h
+        
         xast1+= momentumXast1
         yast1+=momentumYast1
         xast2+= momentumXast2
